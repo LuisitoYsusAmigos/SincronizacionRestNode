@@ -1,0 +1,23 @@
+{
+  "name": "traduccionpy",
+  "version": "1.0.0",
+  "description": "Servicio de sincronazcion dispositvos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "device"
+  ],
+  "author": "Luis",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
