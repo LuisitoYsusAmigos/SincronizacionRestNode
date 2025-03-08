@@ -4,7 +4,7 @@ const db_config = {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'qr',
+    database: 'qr1',
 };
 
 function getDbConnection() {

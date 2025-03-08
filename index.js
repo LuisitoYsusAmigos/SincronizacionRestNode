@@ -1,6 +1,7 @@
 const express = require('express');
 const amigosRouter = require('./routes/amigos');
 const dispositivoRouter = require('./routes/dispositivos');
+const placaRouter = require('./routes/placa');
 require('dotenv').config();
 
 const http = require('http');
@@ -22,6 +23,7 @@ app.use(express.json());
 //Rutas
 app.use('/amigos', amigosRouter);
 app.use('/dispositivos', dispositivoRouter);
+app.use('/placa', placaRouter);
 //WS
 const amigoWss = new WebSocketServer({ noServer: true });
 
