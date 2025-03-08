@@ -1,0 +1,68 @@
+-- create database qr;
+use qr;
+
+
+CREATE TABLE persona (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    estado BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS estado_temporal (
+    persona_id INT PRIMARY KEY,
+    tiempo_expiracion DATETIME NOT NULL
+);
+
+INSERT INTO persona (nombre) VALUES 
+('Juan Pérez'),
+('María López'),
+('Carlos Gómez'),
+('Ana Martínez'),
+('Luis Fernández'),
+('Elena Rodríguez'),
+('Jorge Ramírez'),
+('Paula Sánchez'),
+('Diego Torres'),
+('Carmen Herrera');
+
+use qr;
+DELIMITER //
+
+CREATE PROCEDURE CambiarEstadoTemporal(IN persona_id INT)
+BEGIN
+    -- Cambiar el estado a TRUE
+    UPDATE persona SET estado = TRUE WHERE id = persona_id;
+
+    -- Registrar el tiempo de expiración en la tabla auxiliar
+    INSERT INTO estado_temporal (persona_id, tiempo_expiracion)
+    VALUES (persona_id, NOW() + INTERVAL 10 SECOND)
+    ON DUPLICATE KEY UPDATE tiempo_expiracion = NOW() + INTERVAL 10 SECOND;
+END //
+
+DELIMITER ;
+
+
+
+DELIMITER //
+
+CREATE EVENT ResetEstados
+ON SCHEDULE EVERY 10 SECOND
+DO 
+BEGIN
+    UPDATE persona p
+    JOIN estado_temporal et ON p.id = et.persona_id
+    SET p.estado = FALSE
+    WHERE et.tiempo_expiracion <= NOW();
+
+    -- Eliminar registros procesados
+    DELETE FROM estado_temporal WHERE tiempo_expiracion <= NOW();
+END //
+
+DELIMITER ;
+
+
+SET GLOBAL event_scheduler = ON;
+
+
+
+
